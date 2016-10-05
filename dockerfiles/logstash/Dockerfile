@@ -1,12 +1,13 @@
 FROM debian:jessie
 RUN apt-get update && \
-    apt-get install -y wget
+    apt-get install -y wget vim
 RUN wget https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb -O /tmp/logstash.deb && \
     wget https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash-contrib_1.4.2-1-efd53ef_all.deb -O /tmp/logstash-contrib.deb && \
     dpkg -i /tmp/logstash.deb ; \
     dpkg -i /tmp/logstash-contrib.deb ; \
     apt-get -f -y install && \
-    rm -rf /tmp/logstash.deb /tmp/logstash-contrib.deb
+    rm -rf /tmp/logstash.deb /tmp/logstash-contrib.deb && \
+	/opt/logstash/bin/logstash-plugin install logstash-codec-gzip_lines
 COPY logstash.sample.conf /etc/logstash.sample.conf
 ENTRYPOINT ["/opt/logstash/bin/logstash"]
 CMD []
