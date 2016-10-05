@@ -13,10 +13,10 @@ logstash:
   command: -f /etc/logstash.sample.conf
 kibana:
   ports:
-    - "80:80"
+    - "10080:80"
 logspout:
   environment:
-    DEBUG: true
+    DEBUG: "true"
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
   command: syslog://localhost:5000
@@ -28,4 +28,4 @@ cadvisor:
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
   ports:
-    - "8080:8080"
+    - "18080:8080"
