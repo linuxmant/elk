@@ -10,17 +10,17 @@ services:
     image: logstash:2.4
     ports:
       - "15000:5000"
-      - "15000:5000/udp"
+      - "15001:5001/udp"
     volumes: 
-      - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
-    command: logstash -f /etc/logstash/conf.d/logstash.conf
+      - ./logstash/logstash.conf :/etc/logstash/conf.d/logstash.conf
+    command: logstash -f /etc/logstash/conf.d/logstash.conf --auto-reload
 
   kibana:
     image: kibana:4.6
     ports:
       - "15601:5601"
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:19200
+#    environment:
+#      - ELASTICSEARCH_URL=http://elasticsearch:19200
 
   cadvisor:
     image: google/cadvisor:latest
