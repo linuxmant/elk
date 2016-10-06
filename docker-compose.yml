@@ -1,27 +1,33 @@
-elasticsearch:
-  extends:
-    file: docker-compose-common.yml
-    service: elasticsearch
-  build: dockerfiles/elasticsearch
-logstash:
-  extends:
-    file: docker-compose-common.yml
-    service: logstash
-  build: dockerfiles/logstash
-  links:
-    - elasticsearch:elasticsearch
-kibana:
-  extends:
-    file: docker-compose-common.yml
-    service: kibana
-  build: dockerfiles/kibana
-logspout:
-  net: container:logstash
-  extends:
-    file: docker-compose-common.yml
-    service: logspout
-  build: dockerfiles/logspout
-cadvisor:
-  extends:
-    file: docker-compose-common.yml
-    service: cadvisor
+version: "2.0"
+services:
+  elasticsearch:
+    image: elasticsearch:2.4
+    ports:
+      - "19200:9200"
+      - "19300:9300"
+
+  logstash:
+    image: logstash:2.4
+    ports:
+      - "15000:5000"
+      - "15000:5000/udp"
+    volumes: 
+      - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+
+  kibana:
+    image: kibana:4.6
+    ports:
+      - "15601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:19200
+
+  cadvisor:
+    image: google/cadvisor:latest
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "18080:8080"
