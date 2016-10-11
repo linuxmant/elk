@@ -11,7 +11,6 @@ services:
   logstash:
     image: logstash:2.4
     ports:
-      - "5000:5000"
       - "12201:12201/udp"
     volumes: 
       - ${PWD}/logstash/logstash.conf:/config-dir/logstash.conf
@@ -22,7 +21,7 @@ services:
   kibana:
     image: kibana:4.6
     ports:
-      - "5601:5601"
+      - "80:5601"
     networks:
       - elk
 
