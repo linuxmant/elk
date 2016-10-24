@@ -5,6 +5,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - /mnt/elasticsearch/data:/usr/share/elasticsearch/data
     networks:
       - elk
 
