@@ -16,14 +16,15 @@ services:
       - "12201:12201/udp"
     volumes: 
       - ${PWD}/logstash/logstash.conf:/config-dir/logstash.conf
-    command: logstash -f /config-dir/logstash.conf
+      - /mnt/venus:/mnt/venus:ro
+    command: logstash -r --reload-interval 10 -f /config-dir/logstash.conf
     networks: 
       - elk
 
   kibana:
     image: kibana:4.6
     ports:
-      - "80:5601"
+      - "8888:5601"
     networks:
       - elk
 
